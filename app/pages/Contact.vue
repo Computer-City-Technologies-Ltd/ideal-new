@@ -1,34 +1,3 @@
-<script setup>
-const customername = ref(null);
-const email = ref(null);
-const message = ref(null);
-const honeyPot = ref(false);
-const showThanks = ref(false);
-
-const sendMail = async () => {
-  try {
-    const response = await $fetch("https://submit-form.com/hPy0xsit", {
-      method: "POST",
-      body: {
-        name: customername.value,
-        email: email.value,
-        message: message.value,
-        _honeypot: honeyPot.value,
-      },
-    });
-
-    console.log(response);
-    showThanks.value = true;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const toggleThanks = () => {
-  showThanks.value = !showThanks.value;
-};
-</script>
-
 <template>
   <div class="font-display border-t">
     <Sidemenu class="hidemobile" />
@@ -50,11 +19,11 @@ const toggleThanks = () => {
           </svg>
         </div>
         <div class="container px-5 py-2 mx-auto">
-          <div class="lg:w-1/2 md:w-2/3 mx-auto">
-            <p class="leading-normal my-5">
+          <div class="lg:w-1/2 md:w-2/3 mx-auto text-center">
+            <p class="leading-normal mt-5">
               75-76, B.S. Bhaban, 3rd Floor Laboratory Road Dhaka-1205,
-              Bangladesh Tel: +88029612629-30.
             </p>
+            <p class="leading-normal">Bangladesh Tel: +88029612629-30.</p>
           </div>
         </div>
       </section>
