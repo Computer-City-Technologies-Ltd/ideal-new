@@ -6,17 +6,6 @@ const checkRoute = computed(() => {
 });
 </script>
 
-<!-- <template>
-  <div>
-    <Navbar />
-    <div class="container mx-auto pl-5 hidden lg:block">
-      <Breadcrump v-if="checkRoute" />
-    </div>
-    <NuxtPage />
-    <Footer />
-  </div>
-</template> -->
-
 <template>
   <div>
     <div class="border-b">

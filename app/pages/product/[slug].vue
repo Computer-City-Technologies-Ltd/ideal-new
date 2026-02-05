@@ -16,7 +16,6 @@ const getProduct = async () => {
     const response = await $fetch(
       `https://admindash.comcitybd.com/api/product/${slug}`,
     );
-    console.log(response);
     product.value = response;
   } catch (error) {
     console.error(error);
@@ -31,7 +30,6 @@ const selectTab = (selectedTab) => {
 
 onMounted(() => {
   getProduct();
-  console.log(route);
 });
 </script>
 

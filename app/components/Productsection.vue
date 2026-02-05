@@ -12,8 +12,6 @@ const getData = async () => {
         },
       },
     );
-
-    console.log(response);
     products.value = response.data;
   } catch (error) {
     console.error(error);
