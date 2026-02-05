@@ -1,6 +1,6 @@
 <template>
   <div class="font-display">
-    <section class="text-gray-600 body-font border-t">
+    <section class="text-gray-600 body-font">
       <div
         class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center"
       >
