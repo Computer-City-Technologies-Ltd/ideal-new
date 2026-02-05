@@ -1,26 +1,7 @@
 <script setup>
-const products = ref([]);
-const cat_id = ref([22]);
-
-const getData = async () => {
-  try {
-    const response = await $fetch(
-      "https://admindash.comcitybd.com/api/brand/Ideal%20UPS/1",
-      {
-        params: {
-          id: cat_id.value,
-        },
-      },
-    );
-    products.value = response.data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-onMounted(() => {
-  getData();
-});
+const { data: products, status } = await useFetch(
+  "https://admindash.comcitybd.com/api/brand/Ideal%20UPS/1?id=22",
+);
 </script>
 
 <template>
@@ -33,7 +14,7 @@ onMounted(() => {
         class="grid lg:grid-cols-5 grid-cols-1 gap-8"
         v-if="products != null"
       >
-        <div class="" v-for="product in products" :key="product.slug">
+        <div class="" v-for="product in products.data" :key="product.slug">
           <NuxtLink :to="`/product/${product.slug}`">
             <img
               :src="product.thumbnail"
