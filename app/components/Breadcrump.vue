@@ -1,84 +1,75 @@
 <script setup>
-const props = defineProps({
-  title: {
-    type: String,
-    default: null,
-  },
-});
-
 const route = useRoute();
-const router = useRouter();
+
+const routeTitles = {
+  product: "Product",
+};
 
 const crumbs = computed(() => {
-  const fullPath = route.fullPath;
+  const list = [];
 
-  const params = fullPath.startsWith("/")
-    ? fullPath.slice(1).split("/")
-    : fullPath.split("/");
+  if (
+    route.name === "product-slug" &&
+    !route.matched.some((r) => r.name === "product")
+  ) {
+    list.push({
+      title: "Product",
+      path: "/product",
+      isActive: false,
+    });
+  }
 
-  const crumbs = [];
-  let path = "";
+  route.matched.forEach((item, index) => {
+    if (item.path === "/") return;
 
-  params.forEach((param) => {
-    path += `/${param}`;
+    let path = item.path;
 
-    const match = router.resolve(path);
+    Object.keys(route.params).forEach((param) => {
+      path = path.replace(`:${param}`, route.params[param]);
+    });
 
-    if (match.name) {
-      crumbs.push({
-        title: param.replace(/-/g, " "),
-        ...match,
-      });
+    let title = "";
+
+    if (index === route.matched.length - 1 && route.params.slug) {
+      title = route.params.slug.replace(/-/g, " ");
+    } else {
+      title =
+        routeTitles[item.name || item.path] ||
+        item.name?.replace(/-/g, " ") ||
+        path.split("/").pop().replace(/-/g, " ");
     }
+
+    list.push({
+      title,
+      path,
+      isActive: index === route.matched.length - 1,
+    });
   });
 
-  return crumbs;
+  return list;
 });
 </script>
 
 <template>
-  <div class="font-display container mx-auto">
-    <div class="ml-10 py-2">
-      <nav aria-label="Breadcrumb">
-        <ol
-          role="list"
-          class="flex items-center space-x-1 text-sm text-gray-500"
-        >
-          <li>
-            <nuxt-link
-              to="/"
-              class="block transition-colors hover:text-gray-700"
-            >
-              Home
-            </nuxt-link>
-          </li>
-          <template v-for="crumb in crumbs">
-            <li>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-4 h-4"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </li>
+  <nav class="font-display container mx-auto py-2" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-2 text-sm text-gray-500">
+      <li>
+        <NuxtLink to="/" class="hover:text-gray-700">Home</NuxtLink>
+      </li>
 
-            <li>
-              <NuxtLink
-                :to="crumb.title"
-                class="block transition-colors hover:text-gray-700 capitalize"
-              >
-                {{ crumb.path && title !== null ? title : crumb.title }}
-              </NuxtLink>
-            </li>
-          </template>
-        </ol>
-      </nav>
-    </div>
-  </div>
+      <template v-for="(crumb, idx) in crumbs" :key="idx">
+        <li>/</li>
+        <li>
+          <NuxtLink
+            v-if="!crumb.isActive"
+            :to="crumb.path"
+            class="hover:text-gray-700 capitalize"
+          >
+            {{ crumb.title }}
+          </NuxtLink>
+          <span v-else class="font-bold capitalize">{{ crumb.title }}</span>
+        </li>
+      </template>
+    </ol>
+  </nav>
 </template>
